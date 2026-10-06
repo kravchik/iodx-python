@@ -1,0 +1,11 @@
+// Python generation entry point for the IODX CongoCC grammar.
+
+PARSER_PACKAGE = _generated;
+JAVA_UNICODE_ESCAPE = false;
+PRESERVE_LINE_ENDINGS = true;
+PRESERVE_TABS = true;
+TREE_BUILDING_ENABLED = false;
+
+INCLUDE "python/IodxPythonSupport.inc.ccc"
+INCLUDE "common/IodxTokens.inc.ccc"
+INCLUDE "common/IodxProductions.inc.ccc"

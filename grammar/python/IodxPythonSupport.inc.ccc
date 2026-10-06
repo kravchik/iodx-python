@@ -1,0 +1,124 @@
+// Python target support. Nodes use generated dict/list adapters and are converted
+// to public Python dataclasses outside the generated parser.
+
+INJECT IodxCstParser :
+{
+    private Object cstBeginNode() {
+        Token token = getToken(0);
+        HashMap start = new HashMap();
+        start.put("beginLine", token.getBeginLine());
+        start.put("beginColumn", token.getBeginColumn());
+        start.put("beginOffset", token.getBeginOffset());
+        return start;
+    }
+
+    private Object cstNewList() {
+        return new _List();
+    }
+
+    private void cstListAdd(Object list, Object value) {
+        list.add(value);
+    }
+
+    private Object cstListBody(Object start, Object children) {
+        Token end = getToken(0);
+        return cstRangedNode("LIST_BODY", start, end, null, children, new HashMap());
+    }
+
+    private Object cstSingleLineComment(Token token) {
+        return cstTokenNode("COMMENT_SINGLE_LINE", token, token.toString());
+    }
+
+    private Object cstMultiLineComment(Token token) {
+        return cstTokenNode("COMMENT_MULTI_LINE", token, token.toString());
+    }
+
+    private Object cstInteger(Token token) {
+        return cstTokenNode("INTEGER_LITERAL", token, token.toString());
+    }
+
+    private Object cstFloatingPoint(Token token) {
+        return cstTokenNode("FLOATING_POINT_LITERAL", token, token.toString());
+    }
+
+    private Object cstRawToken(String type, Token token) {
+        return cstTokenNode(type, token, token.toString());
+    }
+
+    private Object cstStructuralToken(String type, Token token) {
+        return cstTokenNode(type, token, null);
+    }
+
+    private Object cstString(String type, Token token) {
+        return cstTokenNode(type, token, token.toString());
+    }
+
+    private Object cstIdentifier(Token token) {
+        return cstTokenNode("ANY_LITERAL", token, token.toString());
+    }
+
+    private Object cstClass(Object name, Object left, Object body, Object right) {
+        Object start = name == null ? left : name;
+        _List children = new _List();
+        HashMap fields = new HashMap();
+        if (name != null) {
+            fields.put("name", name);
+            children.add(name);
+        }
+        children.add(left);
+        children.add(body);
+        children.add(right);
+        fields.put("body", body);
+        return cstNode(
+            name == null ? "UNNAMED_CLASS" : "NAMED_CLASS",
+            start.get("beginLine"), start.get("beginColumn"),
+            right.get("endLine"), right.get("endColumn"),
+            start.get("beginOffset"), right.get("endOffset"),
+            null, children, fields);
+    }
+
+    private Object cstRequireClass(Object node) {
+        if (node.get("type").equals("NAMED_CLASS")) return node;
+        throw new ParseException(this, getToken(0), "Expected a class, but got: " + node.get("type"));
+    }
+
+    private Object cstTokenNode(String type, Token token, Object value) {
+        return cstNode(
+            type,
+            token.getBeginLine(), token.getBeginColumn(),
+            token.getEndLine(), token.getEndColumn(),
+            token.getBeginOffset(), token.getEndOffset(),
+            value, new _List(), new HashMap());
+    }
+
+    private Object cstRangedNode(
+        String type, Object start, Token end, Object value, Object children, Object fields
+    ) {
+        return cstNode(
+            type,
+            start.get("beginLine"), start.get("beginColumn"),
+            end.getEndLine(), end.getEndColumn(),
+            start.get("beginOffset"), end.getEndOffset(),
+            value, children, fields);
+    }
+
+    private Object cstNode(
+        String type,
+        int beginLine, int beginColumn, int endLine, int endColumn,
+        int beginOffset, int endOffset,
+        Object value, Object children, Object fields
+    ) {
+        HashMap node = new HashMap();
+        node.put("type", type);
+        node.put("beginLine", beginLine);
+        node.put("beginColumn", beginColumn);
+        node.put("endLine", endLine);
+        node.put("endColumn", endColumn);
+        node.put("beginOffset", beginOffset);
+        node.put("endOffset", endOffset);
+        node.put("value", value);
+        node.put("children", children);
+        node.put("fields", fields);
+        return node;
+    }
+}

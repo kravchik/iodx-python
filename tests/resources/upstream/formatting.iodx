@@ -1,0 +1,31 @@
+import yk.lang.iodx.TestHierarchy
+(
+  TestHierarchy(
+    map=(
+      ref(1 key1)=ref(
+        2
+        value1
+      )
+      ref(3 key2)=TestHierarchy(
+        map=(
+          ref(4 key3)=ref(
+            5
+            value3
+          )
+        )
+      )
+    )
+  )
+  TestHierarchy(
+    map=(
+      ref(1)=ref(2)
+      ref(3)=TestHierarchy(
+        map=(
+          ref(4)=ref(
+            5
+          )
+        )
+      )
+    )
+  )
+)

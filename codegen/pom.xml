@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.iodx</groupId>
+    <artifactId>iodx-python-codegen</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <congocc.version>2.1.0</congocc.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <defaultGoal>generate-sources</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.congocc</groupId>
+                <artifactId>org.congocc.maven.plugin</artifactId>
+                <version>${congocc.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-python-parser</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>ccc-generate</goal>
+                        </goals>
+                        <configuration>
+                            <lang>python</lang>
+                            <sourceDirectory>${project.basedir}/../grammar</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-python</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>make-generated-sources-reproducible</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="iodx.root" location="${project.basedir}/.."/>
+                                <replace dir="${project.build.directory}/generated-python/_generatedparser"
+                                         includes="*.py"
+                                         token="${iodx.root}/grammar/"
+                                         value="grammar/"/>
+                                <replaceregexp match="(\r?\n)+\z" replace="&#10;" flags="g" byline="false">
+                                    <fileset dir="${project.build.directory}/generated-python/_generatedparser"
+                                             includes="*.py"/>
+                                </replaceregexp>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-generated-parser</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/../src/iodx/_generatedparser</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-python/_generatedparser</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>*.py</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

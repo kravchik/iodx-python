@@ -1,0 +1,35 @@
+// Shared target-independent IODX lexical grammar.
+
+TOKEN : <WHITE_SPACE : (" " | "\t" | "\n" | "\r" | "\f")+> ;
+
+TOKEN :
+    <LEFT_PAREN: "(">
+  | <RIGHT_PAREN: ")">
+  | <COMMENT_SINGLE_LINE: "//" (~["\n","\r"])*>
+  | <COMMENT_MULTI_LINE: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+  | <INTEGER_LITERAL: ("-")?(<DECIMAL_LITERAL> | <HEX_LITERAL>)(["l","L"])?>
+  | <INVALID_LEADING_ZERO_INTEGER: ("-")? "0" (["0"-"9"])+ (["l","L"])?>
+  | <INVALID_HEX_INTEGER: ("-")? "0" ["x","X"] (["a"-"z","A"-"Z","0"-"9","_","."])*>
+  | <#DECIMAL_LITERAL: "0" | ["1"-"9"] (["0"-"9"])*>
+  | <#HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+>
+  | <FLOATING_POINT_LITERAL: ("-")?(
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+)>
+  | <#EXPONENT: ("-")?(["e","E"] (["+","-"])? (["0"-"9"])+)>
+  | <ANY_LITERAL: (["a"-"z","A"-"Z","0"-"9",".","_","$"])+>
+  | <ANY_OPERATOR: ((["+","-","/", "*","%","!","=","^","&","|", "<", ">", "?"])+)>
+  | <ANY_SEPARATOR: (([",",";"]))>
+  | <STRING_LITERAL_DQ: "\""
+      (   (~["\"","\\"])
+        | ("\\" ~[])
+      )*
+      "\"">
+  | <STRING_LITERAL_SQ: "'"
+      (   (~["'","\\"])
+        | ("\\" ~[])
+      )*
+      "'">
+;

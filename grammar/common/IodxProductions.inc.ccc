@@ -1,0 +1,119 @@
+// Target-independent parser structure. Support files implement the cst* helper API.
+
+// Strict top-level API: parse the complete document without trailing input.
+IodxCst parseDocument() #void :
+{
+    IodxCst document;
+}
+    document = parseListBody
+    <EOF>
+    { return document; }
+;
+
+IodxCst parseListBody() #void :
+{
+    Object start = cstBeginNode();
+    Object list;
+}
+    list = parseList
+    { return cstListBody(start, list); }
+;
+
+Object parseList() #void :
+{
+    Object list = cstNewList();
+    Object value;
+}
+    [ <WHITE_SPACE> ]
+    [
+      value = parseElement { cstListAdd(list, value); }
+      [ <WHITE_SPACE> ]
+      (
+        value = parseElement { cstListAdd(list, value); }
+        [ <WHITE_SPACE> ]
+      )*
+    ]
+    { return list; }
+;
+
+IodxCst parseElement() #void :
+{
+    Token token;
+    IodxCst node;
+}
+    node = parseIdentifierOrClass { return node; }
+  |
+    node = parseUnnamedClass { return node; }
+  |
+    token = <COMMENT_SINGLE_LINE> { return cstSingleLineComment(token); }
+  |
+    token = <COMMENT_MULTI_LINE> { return cstMultiLineComment(token); }
+  |
+    token = <INTEGER_LITERAL> { return cstInteger(token); }
+  |
+    token = <FLOATING_POINT_LITERAL> { return cstFloatingPoint(token); }
+  |
+    token = <ANY_OPERATOR> { return cstRawToken("ANY_OPERATOR", token); }
+  |
+    token = <ANY_SEPARATOR> { return cstRawToken("ANY_SEPARATOR", token); }
+  |
+    token = <STRING_LITERAL_DQ> { return cstString("STRING_LITERAL_DQ", token); }
+  |
+    token = <STRING_LITERAL_SQ> { return cstString("STRING_LITERAL_SQ", token); }
+;
+
+// Parses an identifier and decides whether it is a literal or a named class.
+IodxCst parseIdentifierOrClass() #void :
+{
+    Token identifier;
+    IodxCst nameNode;
+    IodxCst leftParenNode;
+    IodxCst rightParenNode;
+    IodxCst body;
+}
+    identifier = <ANY_LITERAL> { nameNode = cstIdentifier(identifier); }
+    [
+        leftParenNode = parseLeftParen
+        body = parseListBody
+        rightParenNode = parseRightParen
+        { return cstClass(nameNode, leftParenNode, body, rightParenNode); }
+    ]
+    { return nameNode; }
+;
+
+IodxCst parseLeftParen() #void :
+{
+    Token token;
+}
+    token = <LEFT_PAREN> { return cstStructuralToken("LEFT_PAREN", token); }
+;
+
+IodxCst parseRightParen() #void :
+{
+    Token token;
+}
+    token = <RIGHT_PAREN> { return cstStructuralToken("RIGHT_PAREN", token); }
+;
+
+// Parses a class starting with '(' and no name.
+IodxCst parseUnnamedClass() #void :
+{
+    IodxCst leftParenNode;
+    IodxCst rightParenNode;
+    IodxCst body;
+}
+    leftParenNode = parseLeftParen
+    body = parseListBody
+    rightParenNode = parseRightParen
+    { return cstClass(null, leftParenNode, body, rightParenNode); }
+;
+
+// Parses either a named or unnamed class, rejecting standalone literals.
+IodxCst parseClass() #void :
+{
+    IodxCst node;
+}
+    node = parseIdentifierOrClass { return cstRequireClass(node); }
+  |
+    node = parseUnnamedClass { return node; }
+;
