@@ -9,3 +9,11 @@ class IodxParseError(ValueError):
     def __init__(self, message: str, caret: Caret | None = None) -> None:
         super().__init__(message)
         self.caret = caret
+
+
+class IodxEntityError(ValueError):
+    """An invalid syntax-model structure with its source location."""
+
+    def __init__(self, message: str, caret: Caret | None = None) -> None:
+        super().__init__(message)
+        self.caret = caret

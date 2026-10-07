@@ -75,8 +75,7 @@ def test_nested_body_positions_use_their_own_opening_parenthesis() -> None:
 
 def test_parse_comments_and_strings() -> None:
     document = parse(
-        "// heading\n/*details*/ 'old\\sscroll' \"Say \\\"open\\\"\" "
-        "'emoji: \\uD83D\\uDE00'"
+        "// heading\n/*details*/ 'old\\sscroll' \"Say \\\"open\\\"\" 'emoji: \\uD83D\\uDE00'"
     )
 
     assert [child.type for child in document.children] == [

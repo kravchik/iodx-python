@@ -77,9 +77,7 @@ def unescape(value: str) -> str:
                         )
                     low_surrogate = _parse_unicode_escape(value, low_offset)
                     if not _is_low_surrogate(low_surrogate):
-                        raise IodxEscapeError(
-                            "Expected a low surrogate escape", low_offset, 6
-                        )
+                        raise IodxEscapeError("Expected a low surrogate escape", low_offset, 6)
                     result.append(chr(_combine_surrogates(code_unit, low_surrogate)))
                     offset = low_offset + 6
                     continue
@@ -92,9 +90,7 @@ def unescape(value: str) -> str:
 
             decoded = _UNESCAPES.get(escape_symbol)
             if decoded is None:
-                raise IodxEscapeError(
-                    f"Unknown escape symbol: {escape_symbol}", escape_offset, 2
-                )
+                raise IodxEscapeError(f"Unknown escape symbol: {escape_symbol}", escape_offset, 2)
             result.append(decoded)
             offset += 1
             continue

@@ -9,6 +9,7 @@ from .caret import Caret
 from .cst import IodxCst
 from .errors import IodxParseError
 from .escaping import IodxEscapeError, unescape_quoted
+from .numbers import IodxFloat32, IodxFloat64, IodxInt64
 
 _RawNode = Mapping[str, Any]
 
@@ -131,11 +132,15 @@ def parse(source: str) -> IodxCst:
 
 def _convert_value(node_type: str, raw_value: Any) -> Any:
     if node_type == "INTEGER_LITERAL":
-        text = raw_value[:-1] if raw_value[-1] in "lL" else raw_value
-        return int(text, 0)
+        is_long = raw_value[-1] in "lL"
+        text = raw_value[:-1] if is_long else raw_value
+        value = int(text, 0)
+        return IodxInt64(value) if is_long else value
     if node_type == "FLOATING_POINT_LITERAL":
-        text = raw_value[:-1] if raw_value[-1] in "fFdD" else raw_value
-        return float(text)
+        suffix = raw_value[-1] if raw_value[-1] in "fFdD" else ""
+        text = raw_value[:-1] if suffix else raw_value
+        value = float(text)
+        return IodxFloat64(value) if suffix and suffix in "dD" else IodxFloat32(value)
     if node_type in {"STRING_LITERAL_DQ", "STRING_LITERAL_SQ"}:
         return unescape_quoted(raw_value)
     if node_type == "COMMENT_SINGLE_LINE":

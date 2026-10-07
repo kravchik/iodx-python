@@ -6,6 +6,45 @@ syntax for structured data, configs, fixtures, serialization, and data exchange.
 This implementation is under development. The language-independent grammar lives
 in the main [IODX repository](https://github.com/kravchik/iodx).
 
+## Usage
+
+Parse text into a concrete syntax tree with `parse`, or deserialize the higher-level
+syntax model with `loads` and `loads_all`:
+
+```python
+from iodx import IodxEntity, IodxField, dumps, loads
+
+scroll = loads('SpellScroll(title = "Whisper" charges = 3)')
+
+assert isinstance(scroll, IodxEntity)
+assert scroll.name == "SpellScroll"
+assert scroll.children == [
+    IodxField("title", "Whisper"),
+    IodxField("charges", 3),
+]
+
+text = dumps(scroll, max_width=40)
+```
+
+Use `load` and `dump` with text streams. Their `*_all` variants handle multiple
+top-level values:
+
+```python
+from iodx import dump, load
+
+with open("scroll.iodx", encoding="utf-8") as source:
+    scroll = load(source)
+
+with open("scroll.iodx", "w", encoding="utf-8") as target:
+    dump(scroll, target, max_width=40)
+```
+
+The syntax model retains named and unnamed entities, fields, comments, and source
+ranges. `IodxPrinter` additionally exposes `max_width`, `max_local_width`,
+`compact_from_level`, and `tab` formatting settings through its `render` and
+`render_all` methods. Mapping syntax values to Python classes is not implemented
+yet.
+
 ## Development
 
 Create a virtual environment and install the package with its development tools:
