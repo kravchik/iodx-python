@@ -378,210 +378,197 @@ class Parser:
         return list
         # end of parse_parseList
 
-    parseElement_FIRST_SET = make_frozenset(
-LEFT_PAREN,
-COMMENT_SINGLE_LINE,
-COMMENT_MULTI_LINE,
-INTEGER_LITERAL,
-FLOATING_POINT_LITERAL,
-ANY_LITERAL,
-ANY_OPERATOR,
-ANY_SEPARATOR,
-STRING_LITERAL_DQ,
-STRING_LITERAL_SQ
-    )
     # grammar/common/IodxProductions.inc.ccc:39:1
     def parse_parseElement(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseElement'
         # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:39:1
-        # Code for ExpansionChoice specified at grammar/common/IodxProductions.inc.ccc:40:1
-        if ((self.type_matches(ANY_LITERAL, self.get_token(1))) ):
         # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:40:1
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:44:5
-            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 44, 5)
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:45:5
+        token = None
+        node = None
+        if ((self.type_matches(ANY_LITERAL, self.get_token(1))) ):
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:47:7
+            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 47, 7)
             try:
                 node = self.parse_parseIdentifierOrClass()
             finally:
                 self.pop_call_stack()
-                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:44:35
+                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:47:37
             return node
         elif ((self.type_matches(LEFT_PAREN, self.get_token(1))) ):
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:46:5
-            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 46, 5)
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:49:7
+            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 49, 7)
             try:
                 node = self.parse_parseUnnamedClass()
             finally:
                 self.pop_call_stack()
-                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:46:30
+                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:49:32
             return node
         elif ((self.type_matches(COMMENT_SINGLE_LINE, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:48:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:51:7
             token = self.consume_token(COMMENT_SINGLE_LINE)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:48:35
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:51:37
             return self.cst_single_line_comment(token)
         elif ((self.type_matches(COMMENT_MULTI_LINE, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:50:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:53:7
             token = self.consume_token(COMMENT_MULTI_LINE)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:50:34
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:53:36
             return self.cst_multi_line_comment(token)
         elif ((self.type_matches(INTEGER_LITERAL, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:52:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:55:7
             token = self.consume_token(INTEGER_LITERAL)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:52:31
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:55:33
             return self.cst_integer(token)
         elif ((self.type_matches(FLOATING_POINT_LITERAL, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:54:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:57:7
             token = self.consume_token(FLOATING_POINT_LITERAL)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:54:38
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:57:40
             return self.cst_floating_point(token)
         elif ((self.type_matches(ANY_OPERATOR, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:56:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:59:7
             token = self.consume_token(ANY_OPERATOR)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:56:28
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:59:30
             return self.cst_raw_token("ANY_OPERATOR", token)
         elif ((self.type_matches(ANY_SEPARATOR, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:58:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:61:7
             token = self.consume_token(ANY_SEPARATOR)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:58:29
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:61:31
             return self.cst_raw_token("ANY_SEPARATOR", token)
         elif ((self.type_matches(STRING_LITERAL_DQ, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:60:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:63:7
             token = self.consume_token(STRING_LITERAL_DQ)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:60:33
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:63:35
             return self.cst_string("STRING_LITERAL_DQ", token)
         elif ((self.type_matches(STRING_LITERAL_SQ, self.get_token(1))) ):
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:62:5
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:65:7
             token = self.consume_token(STRING_LITERAL_SQ)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:62:33
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:65:35
             return self.cst_string("STRING_LITERAL_SQ", token)
         else: # not *, +, or ?
 
-            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 40, 1)
-            raise ParseException(self, expected=self.parseElement_FIRST_SET)
+            self.push_onto_call_stack('parseElement', 'grammar/common/IodxProductions.inc.ccc', 47, 7)
+            raise ParseException(self, expected=self.first_setΣIodxProductions_inc_cccΣ47Σ7)
             # end of parse_parseElement
 
-    # grammar/common/IodxProductions.inc.ccc:66:1
+    # grammar/common/IodxProductions.inc.ccc:70:1
     def parse_parseIdentifierOrClass(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseIdentifierOrClass'
-        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:66:1
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:67:1
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:74:5
+        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:70:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:71:1
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:78:5
         identifier = self.consume_token(ANY_LITERAL)
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:74:32
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:78:32
         name_node = self.cst_identifier(identifier)
-        # Code for ZeroOrOne specified at grammar/common/IodxProductions.inc.ccc:75:5
+        # Code for ZeroOrOne specified at grammar/common/IodxProductions.inc.ccc:79:5
         if (self.type_matches(LEFT_PAREN, self.get_token(1))) :
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:76:9
-            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 76, 9)
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:80:9
+            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 80, 9)
             try:
                 left_paren_node = self.parse_parseLeftParen()
             finally:
                 self.pop_call_stack()
-                # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:77:9
-            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 77, 9)
+                # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:81:9
+            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 81, 9)
             try:
                 body = self.parse_parseListBody()
             finally:
                 self.pop_call_stack()
-                # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:78:9
-            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 78, 9)
+                # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:82:9
+            self.push_onto_call_stack('parseIdentifierOrClass', 'grammar/common/IodxProductions.inc.ccc', 82, 9)
             try:
                 right_paren_node = self.parse_parseRightParen()
             finally:
                 self.pop_call_stack()
-                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:79:9
+                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:83:9
             return self.cst_class(name_node, left_paren_node, body, right_paren_node)
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:81:5
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:85:5
         return name_node
         # end of parse_parseIdentifierOrClass
 
-    # grammar/common/IodxProductions.inc.ccc:84:1
+    # grammar/common/IodxProductions.inc.ccc:88:1
     def parse_parseLeftParen(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseLeftParen'
-        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:84:1
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:85:1
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:88:5
+        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:88:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:89:1
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:92:5
         token = self.consume_token(LEFT_PAREN)
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:88:26
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:92:26
         return self.cst_structural_token("LEFT_PAREN", token)
         # end of parse_parseLeftParen
 
-    # grammar/common/IodxProductions.inc.ccc:91:1
+    # grammar/common/IodxProductions.inc.ccc:95:1
     def parse_parseRightParen(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseRightParen'
-        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:91:1
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:92:1
-        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:95:5
+        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:95:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:96:1
+        # Code for Terminal specified at grammar/common/IodxProductions.inc.ccc:99:5
         token = self.consume_token(RIGHT_PAREN)
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:95:27
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:99:27
         return self.cst_structural_token("RIGHT_PAREN", token)
         # end of parse_parseRightParen
 
-    # grammar/common/IodxProductions.inc.ccc:99:1
+    # grammar/common/IodxProductions.inc.ccc:103:1
     def parse_parseUnnamedClass(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseUnnamedClass'
-        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:99:1
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:100:1
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:105:5
-        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 105, 5)
+        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:103:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:104:1
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:109:5
+        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 109, 5)
         try:
             left_paren_node = self.parse_parseLeftParen()
         finally:
             self.pop_call_stack()
-            # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:106:5
-        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 106, 5)
+            # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:110:5
+        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 110, 5)
         try:
             body = self.parse_parseListBody()
         finally:
             self.pop_call_stack()
-            # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:107:5
-        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 107, 5)
+            # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:111:5
+        self.push_onto_call_stack('parseUnnamedClass', 'grammar/common/IodxProductions.inc.ccc', 111, 5)
         try:
             right_paren_node = self.parse_parseRightParen()
         finally:
             self.pop_call_stack()
-            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:108:5
+            # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:112:5
         return self.cst_class(None, left_paren_node, body, right_paren_node)
         # end of parse_parseUnnamedClass
 
-    parseClass_FIRST_SET = make_frozenset(
-LEFT_PAREN,
-ANY_LITERAL
-    )
-    # grammar/common/IodxProductions.inc.ccc:112:1
+    # grammar/common/IodxProductions.inc.ccc:116:1
     def parse_parseClass(self, ):
     # import pdb; pdb.set_trace()
         self.currently_parsed_production = 'parseClass'
-        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:112:1
-        # Code for ExpansionChoice specified at grammar/common/IodxProductions.inc.ccc:113:1
+        # Code for BNFProduction specified at grammar/common/IodxProductions.inc.ccc:116:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:117:1
+        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:121:5
+        node = None
         if ((self.type_matches(ANY_LITERAL, self.get_token(1))) ):
-        # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:113:1
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:116:5
-            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 116, 5)
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:123:7
+            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 123, 7)
             try:
                 node = self.parse_parseIdentifierOrClass()
             finally:
                 self.pop_call_stack()
-                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:116:35
+                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:123:37
             return self.cst_require_class(node)
         elif ((self.type_matches(LEFT_PAREN, self.get_token(1))) ):
-        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:118:5
-            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 118, 5)
+        # Code for NonTerminal specified at grammar/common/IodxProductions.inc.ccc:125:7
+            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 125, 7)
             try:
                 node = self.parse_parseUnnamedClass()
             finally:
                 self.pop_call_stack()
-                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:118:30
+                # Code for CodeBlock specified at grammar/common/IodxProductions.inc.ccc:125:32
             return node
         else: # not *, +, or ?
 
-            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 113, 1)
-            raise ParseException(self, expected=self.parseClass_FIRST_SET)
+            self.push_onto_call_stack('parseClass', 'grammar/common/IodxProductions.inc.ccc', 123, 7)
+            raise ParseException(self, expected=self.first_setΣIodxProductions_inc_cccΣ123Σ7)
             # end of parse_parseClass
             # ==================================================================
             # EnumSets that represent the various expansions' first set (i.e. the set of tokens with which the expansion can begin)
@@ -610,6 +597,22 @@ ANY_OPERATOR,
 ANY_SEPARATOR,
 STRING_LITERAL_DQ,
 STRING_LITERAL_SQ
+    )
+    first_setΣIodxProductions_inc_cccΣ47Σ7 = make_frozenset(
+LEFT_PAREN,
+COMMENT_SINGLE_LINE,
+COMMENT_MULTI_LINE,
+INTEGER_LITERAL,
+FLOATING_POINT_LITERAL,
+ANY_LITERAL,
+ANY_OPERATOR,
+ANY_SEPARATOR,
+STRING_LITERAL_DQ,
+STRING_LITERAL_SQ
+    )
+    first_setΣIodxProductions_inc_cccΣ123Σ7 = make_frozenset(
+LEFT_PAREN,
+ANY_LITERAL
     )
     def scan_token_one(self, expected_type):
         peeked_token = self.next_token(self.current_lookahead_token)

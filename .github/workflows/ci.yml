@@ -8,6 +8,19 @@ permissions:
   contents: read
 
 jobs:
+  upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: kravchik/iodx
+          path: iodx-upstream
+      - name: Verify upstream mirror
+        run: scripts/sync-from-java.sh --check
+        env:
+          IODX_SOURCE_ROOT: ${{ github.workspace }}/iodx-upstream
+
   test:
     name: Python ${{ matrix.python }} on ${{ matrix.os }}
     strategy:

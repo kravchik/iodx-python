@@ -41,25 +41,29 @@ IodxCst parseElement() #void :
     Token token;
     IodxCst node;
 }
-    node = parseIdentifierOrClass { return node; }
-  |
-    node = parseUnnamedClass { return node; }
-  |
-    token = <COMMENT_SINGLE_LINE> { return cstSingleLineComment(token); }
-  |
-    token = <COMMENT_MULTI_LINE> { return cstMultiLineComment(token); }
-  |
-    token = <INTEGER_LITERAL> { return cstInteger(token); }
-  |
-    token = <FLOATING_POINT_LITERAL> { return cstFloatingPoint(token); }
-  |
-    token = <ANY_OPERATOR> { return cstRawToken("ANY_OPERATOR", token); }
-  |
-    token = <ANY_SEPARATOR> { return cstRawToken("ANY_SEPARATOR", token); }
-  |
-    token = <STRING_LITERAL_DQ> { return cstString("STRING_LITERAL_DQ", token); }
-  |
-    token = <STRING_LITERAL_SQ> { return cstString("STRING_LITERAL_SQ", token); }
+    // Keep declarations outside the first choice branch in the C# target.
+    { token = null; node = null; }
+    (
+      node = parseIdentifierOrClass { return node; }
+    |
+      node = parseUnnamedClass { return node; }
+    |
+      token = <COMMENT_SINGLE_LINE> { return cstSingleLineComment(token); }
+    |
+      token = <COMMENT_MULTI_LINE> { return cstMultiLineComment(token); }
+    |
+      token = <INTEGER_LITERAL> { return cstInteger(token); }
+    |
+      token = <FLOATING_POINT_LITERAL> { return cstFloatingPoint(token); }
+    |
+      token = <ANY_OPERATOR> { return cstRawToken("ANY_OPERATOR", token); }
+    |
+      token = <ANY_SEPARATOR> { return cstRawToken("ANY_SEPARATOR", token); }
+    |
+      token = <STRING_LITERAL_DQ> { return cstString("STRING_LITERAL_DQ", token); }
+    |
+      token = <STRING_LITERAL_SQ> { return cstString("STRING_LITERAL_SQ", token); }
+    )
 ;
 
 // Parses an identifier and decides whether it is a literal or a named class.
@@ -113,7 +117,11 @@ IodxCst parseClass() #void :
 {
     IodxCst node;
 }
-    node = parseIdentifierOrClass { return cstRequireClass(node); }
-  |
-    node = parseUnnamedClass { return node; }
+    // Keep the declaration outside the first choice branch in the C# target.
+    { node = null; }
+    (
+      node = parseIdentifierOrClass { return cstRequireClass(node); }
+    |
+      node = parseUnnamedClass { return node; }
+    )
 ;
