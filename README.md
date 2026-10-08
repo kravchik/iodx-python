@@ -63,16 +63,9 @@ will not require Java or Maven.
 ## Parser generation
 
 CongoCC grammar shared with the Java implementation and its `.iodx` test fixtures
-are mirrored from a sibling `iodx` checkout. Synchronize or verify them with:
-
-```shell
-scripts/sync-from-java.sh
-scripts/sync-from-java.sh --check
-```
-
-Set `IODX_SOURCE_ROOT` if the Java repository is not located at `../iodx` relative
-to this repository. The copied files remain committed, so normal builds and tests
-do not depend on the sibling checkout.
+are copied into this repository and committed. Synchronization is intentionally a
+separate workspace maintenance step, so builds and tests do not depend on another
+repository checkout.
 
 CongoCC itself runs on the JVM. Regenerate the parser from the repository root with:
 
